@@ -49,8 +49,8 @@ const login = async (req, res) => {
             {expiresIn: '1h'}
         );*/
 
-        const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 5 });
-        const refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: 15 });
+        const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+        const refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 
         res.status(200).json({ userId: user._id, access_token: accessToken, refresh_token: refreshToken });
     } catch (error) {
@@ -67,7 +67,7 @@ const refreshToken = async (req, res) => {
             if (err) return res.status(403).json({ error: 'Invalid refresh token' });
 
             // Generate a new access token
-            const accessToken = jwt.sign({ userId: user.userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 15 });
+            const accessToken = jwt.sign({ userId: user.userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '7d' });
 
             res.json({ access_token: accessToken });
         });
